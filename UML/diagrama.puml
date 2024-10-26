@@ -1,0 +1,67 @@
+@startuml Diagrama
+
+class App {
+    - tareas : Array<Tarea>
+    + agregarTarea(t : Tarea) : void
+    + editarTarea() : void
+    + buscarTarea(titulo : string) : Tarea | undefined
+    + buscarTareasPorVto(f : Date) : Array<Tarea>
+    + cargarPorcentajeAvance(titulo : string, a : number) : void
+    + marcarTareaCompletada(titulo : string) : void
+    + eliminarNoRelevantes() : void
+    + buscarTareasConEtiqueta(e : string) : Array<Tarea>
+    + buscarTareasPendientes() : Array<Tarea>
+    + buscarTareasCompletadas() : Array<Tarea>
+    + getTasaFinalizacion() : number
+    + ordenarPorTitulo() : void
+    + ordenarPorFechaVto() : void
+    + ordenarPorPrioridad() : void
+}
+
+class Tarea {
+    - titulo : string
+    - descripción : string
+    - fechaVto : Date
+    - nivelPrioridad : TareaPrioridad
+    - esRelevante : boolean
+    - porcentajeAvance : number
+    - completada : boolean
+    - categoria : TareaCategoria
+    - etiquetas : Array<string>
+    + getTitulo() : string
+    + getDescripción() : string
+    + getFechaVto() : Date
+    + getNivelPrioridad() : TareaPrioridad
+    + getEsRelevante() : boolean
+    + getPorcentajeAvance() : number
+    + getCompletada() : boolean
+    + getCategoria() : TareaCategoria
+    + getEtiquetas() : Array<string>
+    + setTitulo(titulo : string) : void
+    + setDescripción(descripción : string) : void
+    + setFechaVto(fechaVto : Date) : void
+    + setNivelPrioridad(nivelPrioridad : TareaPrioridad) : void
+    + setEsRelevante(esRelevante : boolean) : void
+    + setPorcentajeAvance(porcentajeAvance : number) : void
+    + setCompletada(completada : boolean) : void
+    + setCategoria(categoria : TareaCategoria) : void
+    + agregarEtiqueta(e : string) : void
+    + eliminarEtiquetas(e : string) : void
+}
+
+enum TareaPrioridad {
+    ALTA
+    MEDIA
+    BAJA
+}
+
+enum TareaCategoria {
+    TRABAJO
+    PERSONAL
+    RECADOS
+}
+
+App --> Tarea : "tareas : Array<Tarea>"
+Tarea --> TareaPrioridad
+Tarea --> TareaCategoria
+@enduml

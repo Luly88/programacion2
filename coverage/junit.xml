@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="1" failures="0" errors="0" time="0.862">
+  <testsuite name="test de la clase vagon de carga" errors="0" failures="0" skipped="0" timestamp="2024-09-22T22:53:39" time="0.836" tests="1">
+    <testcase classname="test de la clase vagon de carga test de la clase vagon de carga test de la clase vagon de carga" name="test de la clase vagon de carga test de la clase vagon de carga test de la clase vagon de carga" time="0.002">
+    </testcase>
+  </testsuite>
+</testsuites>
