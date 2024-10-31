@@ -6,11 +6,11 @@ class Sistema {
   - visualizador: Visualizador
   - estadisticas: Estadisticas
   - persistencia: IPersistencia
-  + agregarTarea(nuevaTarea: Tarea): void
-  + eliminarTarea(tarea: Tarea): void
-  + editarTarea(estrategia: IEstrategiaEdicion, tarea: Tarea): void
-  + buscarTareas(criterio: any): List<Tarea>
-  + ordenarTareas(): List<Tarea>
+  + agregarTarea(idTarea: string ): void
+  + eliminarTarea(idTarea: string): void
+  + editarTarea(estrategia: IEstrategiaEdicion, idTarea: string, nuevoValor: any): void
+  + buscarTareas(estrategia: EstrategiaBusqueda, valorBusqueda: T): void
+  + ordenarTareas(metodoOrdenamiento: EstrategiaOrdenamiento): void
   + generarEstadisticas(): void
   + obtenerTareas(): List<Tarea>
   + cargarTareas(): void
@@ -18,60 +18,61 @@ class Sistema {
 
 
 class Tarea {
+  -id:string
   - titulo: string
   - descripcion: string
   - fechaVencimiento: Date
-  - prioridad: int
+  - prioridad: prioridad
   - etiquetas: List<string>
-  - categoria: string
+  - categoria: categorias
   - porcentajeAvance: int
   + getters_y_setters
   + marcarCompletada(): void
 }
 
 class GestorTareas {
-  + crearTarea(tareas: List<Tarea>, nuevaTarea: Tarea): void
-  + eliminarTarea(tareas: List<Tarea>, tarea: Tarea): void
-  + editarTarea(tareas: List<Tarea>, estrategia: IEstrategiaEdicion, tarea: Tarea): void
+  + agregarTarea(tareas: List<Tarea>, idTarea:string ): void
+  + eliminarTarea(tareas: List<Tarea>, idTarea: string): void
+  + editarTarea(estrategia: IEstrategiaEdicion, tarea: Tarea, nuevoValor: any): void
+  - buscarTareaPorId(tareas: List<Tarea>, idTarea: string): Tarea
 }
 
 interface IEstrategiaEdicion {
-  + editar(tarea: Tarea): void
+  + editar(tarea: Tarea,nuevoValor: any): void
 }
 
 class EditarTitulo implements IEstrategiaEdicion {
-  + editar(tarea: Tarea): void
+  + editar(tarea: Tarea, nuevoValor: string ): void
 }
 
 class EditarDescripcion implements IEstrategiaEdicion {
-  + editar(tarea: Tarea): void
+  + editar(tarea: Tarea, nuevoValor: string): void
 }
 
 class EditarFecha implements IEstrategiaEdicion {
-  + editar(tarea: Tarea): void
+  + editar(tarea: Tarea, nuevoValor: Date): void
 }
 
 class EditarPorcentaje implements IEstrategiaEdicion {
-  + editar(tarea: Tarea): void
+  + editar(tarea: Tarea, nuevoValor: number): void
 }
 
 class Visualizador {
-  - estrategiaBusqueda: EstrategiaBusqueda
-  - estrategiaOrdenamiento: EstrategiaOrdenamiento
-  + buscarTareas(tareas: List<Tarea>, criterio: any): List<Tarea>
-  + ordenarTareas(tareas: List<Tarea>): List<Tarea>
+  + buscarTareas(tareas: List<Tarea>, metodoBusqueda: EstrategiaBusqueda, valorBusqueda: T): List<Tarea>
+  + ordenarTareas(tareas: List<Tarea>, metodoOrdenamiento: EstrategiaOrdenamiento): List<Tarea>
 }
 
+
 interface EstrategiaBusqueda {
-  + buscar(tareas: List<Tarea>, criterio: any): List<Tarea>
+  + buscar(tareas: List<Tarea>, valorBusqueda: T): List<Tarea>
 }
 
 class BuscarPorTitulo implements EstrategiaBusqueda {
-  + buscar(tareas: List<Tarea>, criterio: any): List<Tarea>
+  + buscar(tareas: List<Tarea>, valorBusqueda: string): List<Tarea>
 }
 
 class BuscarPorFechaVencimiento implements EstrategiaBusqueda {
-  + buscar(tareas: List<Tarea>, criterio: any): List<Tarea>
+  + buscar(tareas: List<Tarea>, valorBusqueda: Date): List<Tarea>
 }
 
 interface EstrategiaOrdenamiento {
@@ -87,9 +88,9 @@ class OrdenarPorFecha implements EstrategiaOrdenamiento {
 }
 
 class Estadisticas {
-  + calcularProgreso(tareas: List<Tarea>): float
-  + calcularTareasCompletadas(tareas: List<Tarea>): int
-  + calcularTiempoDedicado(tareas: List<Tarea>): float
+  + calcularProgreso(tareas: List<Tarea>): number
+  + calcularTareasCompletadas(tareas: List<Tarea>): number
+  + calcularTiempoDedicado(tareas: List<Tarea>): number
 }
 
 interface IPersistencia {
@@ -102,18 +103,31 @@ class PersistenciaJSON implements IPersistencia {
   + cargar(): List<Tarea>
 }
 
+'ENUM
+enum prioridad{
+  ALTA
+    MEDIA
+    BAJA
+  }
+  enum categorias{
+    TRABAJO
+    PERSONAL
+    RECADO
+    OTRO
+  }
 
 
-' Relaciones
-Sistema *-- Tarea
-Sistema *-- GestorTareas
-Sistema *-- Visualizador
-Sistema *-- Estadisticas
-Sistema o-- IPersistencia
 
-GestorTareas <-- IEstrategiaEdicion
+  ' Relaciones
+  Sistema *-- Tarea
+  Sistema *-- GestorTareas
+  Sistema *-- Visualizador
+  Sistema *-- Estadisticas
+  Sistema o-- IPersistencia
 
-Visualizador <-- EstrategiaBusqueda
-Visualizador <-- EstrategiaOrdenamiento
+  GestorTareas <-- IEstrategiaEdicion
 
-@enduml
+  Visualizador <-- EstrategiaBusqueda
+  Visualizador <-- EstrategiaOrdenamiento
+
+  @enduml
