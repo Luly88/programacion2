@@ -8,7 +8,7 @@ class Sistema {
   - persistencia: IPersistencia
   + agregarTarea(idTarea: string ): void
   + eliminarTarea(idTarea: string): void
-  + editarTarea(estrategia: IEstrategiaEdicion, idTarea: string, nuevoValor: any): void
+  + editarTarea()
   + buscarTareas(estrategia: EstrategiaBusqueda, valorBusqueda: T): void
   + ordenarTareas(metodoOrdenamiento: EstrategiaOrdenamiento): void
   + generarEstadisticas(): void
@@ -26,6 +26,7 @@ class Tarea {
   - etiquetas: List<string>
   - categoria: categorias
   - porcentajeAvance: int
+  
   + getters_y_setters
   + marcarCompletada(): void
 }
@@ -33,29 +34,10 @@ class Tarea {
 class GestorTareas {
   + agregarTarea(tareas: List<Tarea>, idTarea:string ): void
   + eliminarTarea(tareas: List<Tarea>, idTarea: string): void
-  + editarTarea(estrategia: IEstrategiaEdicion, tarea: Tarea, nuevoValor: any): void
+  + editarTarea(): 
   - buscarTareaPorId(tareas: List<Tarea>, idTarea: string): Tarea
 }
 
-interface IEstrategiaEdicion {
-  + editar(tarea: Tarea,nuevoValor: any): void
-}
-
-class EditarTitulo implements IEstrategiaEdicion {
-  + editar(tarea: Tarea, nuevoValor: string ): void
-}
-
-class EditarDescripcion implements IEstrategiaEdicion {
-  + editar(tarea: Tarea, nuevoValor: string): void
-}
-
-class EditarFecha implements IEstrategiaEdicion {
-  + editar(tarea: Tarea, nuevoValor: Date): void
-}
-
-class EditarPorcentaje implements IEstrategiaEdicion {
-  + editar(tarea: Tarea, nuevoValor: number): void
-}
 
 class Visualizador {
   + buscarTareas(tareas: List<Tarea>, metodoBusqueda: EstrategiaBusqueda, valorBusqueda: T): List<Tarea>
@@ -124,8 +106,6 @@ enum prioridad{
   Sistema *-- Visualizador
   Sistema *-- Estadisticas
   Sistema o-- IPersistencia
-
-  GestorTareas <-- IEstrategiaEdicion
 
   Visualizador <-- EstrategiaBusqueda
   Visualizador <-- EstrategiaOrdenamiento
