@@ -1,67 +1,120 @@
-@startuml Diagrama
-
-class App {
-    - tareas : Array<Tarea>
-    + agregarTarea(t : Tarea) : void
-    + editarTarea() : void
-    + buscarTarea(titulo : string) : Tarea | undefined
-    + buscarTareasPorVto(f : Date) : Array<Tarea>
-    + cargarPorcentajeAvance(titulo : string, a : number) : void
-    + marcarTareaCompletada(titulo : string) : void
-    + eliminarNoRelevantes() : void
-    + buscarTareasConEtiqueta(e : string) : Array<Tarea>
-    + buscarTareasPendientes() : Array<Tarea>
-    + buscarTareasCompletadas() : Array<Tarea>
-    + getTasaFinalizacion() : number
-    + ordenarPorTitulo() : void
-    + ordenarPorFechaVto() : void
-    + ordenarPorPrioridad() : void
+@startuml TODO_app
+' Definición de clases
+class Sistema {
+    
+  - tareas: List<Tarea>
+  - gestorTareas: GestorTareas
+  - visualizador: Visualizador
+  - estadisticas: Estadisticas
+  - persistencia: IPersistencia
+  + agregarTarea(idTarea: string ): void
+  + eliminarTarea(idTarea: string): void
+  + editarTarea(estrategia: IEstrategiaEdicion, idTarea: string, nuevoValor: any): void
+  + buscarTareas(estrategia: EstrategiaBusqueda, valorBusqueda: T): void
+  + ordenarTareas(metodoOrdenamiento: EstrategiaOrdenamiento): void
+  + generarEstadisticas(): void
+  + obtenerTareas(): List<Tarea>
+  + cargarTareas(): void
 }
+
 
 class Tarea {
-    - titulo : string
-    - descripción : string
-    - fechaVto : Date
-    - nivelPrioridad : TareaPrioridad
-    - esRelevante : boolean
-    - porcentajeAvance : number
-    - completada : boolean
-    - categoria : TareaCategoria
-    - etiquetas : Array<string>
-    + getTitulo() : string
-    + getDescripción() : string
-    + getFechaVto() : Date
-    + getNivelPrioridad() : TareaPrioridad
-    + getEsRelevante() : boolean
-    + getPorcentajeAvance() : number
-    + getCompletada() : boolean
-    + getCategoria() : TareaCategoria
-    + getEtiquetas() : Array<string>
-    + setTitulo(titulo : string) : void
-    + setDescripción(descripción : string) : void
-    + setFechaVto(fechaVto : Date) : void
-    + setNivelPrioridad(nivelPrioridad : TareaPrioridad) : void
-    + setEsRelevante(esRelevante : boolean) : void
-    + setPorcentajeAvance(porcentajeAvance : number) : void
-    + setCompletada(completada : boolean) : void
-    + setCategoria(categoria : TareaCategoria) : void
-    + agregarEtiqueta(e : string) : void
-    + eliminarEtiquetas(e : string) : void
+  - id:string
+  - titulo: string
+  - descripcion: string
+  - fechaVencimiento: Date
+  - prioridad: prioridad
+  - etiquetas: List<string>
+  - categoria: categorias
+  - porcentajeAvance: number
+  + getters_y_setters
+  + marcarCompletada(): void
 }
 
-enum TareaPrioridad {
+class GestorTareas {
+  + agregarTarea(tareas: List<Tarea>, idTarea:string ): void
+  + eliminarTarea(tareas: List<Tarea>, idTarea: string): void
+  + editarTarea(estrategia: IEstrategiaEdicion, tarea: Tarea, nuevoValor: T): void
+  - buscarTareaPorId(tareas: List<Tarea>, idTarea: string): Tarea
+}
+
+class Etiqueta {
+   -nombreEtiqueta: string
+
+}
+
+class Categoria {
+    -nombreCategoria: string
+
+}
+
+class Visualizador {
+  + buscarTareas(tareas: List<Tarea>, metodoBusqueda: EstrategiaBusqueda, valorBusqueda: T): List<Tarea>
+  + ordenarTareas(tareas: List<Tarea>, metodoOrdenamiento: EstrategiaOrdenamiento): List<Tarea>
+}
+
+
+interface EstrategiaBusqueda {
+  + buscar(tareas: List<Tarea>, valorBusqueda: T): List<Tarea>
+}
+
+class BuscarPorTitulo implements EstrategiaBusqueda {
+  + buscar(tareas: List<Tarea>, valorBusqueda: string): List<Tarea>
+}
+
+class BuscarPorFechaVencimiento implements EstrategiaBusqueda {
+  + buscar(tareas: List<Tarea>, valorBusqueda: Date): List<Tarea>
+}
+
+interface EstrategiaOrdenamiento {
+  + ordenar(tareas: List<Tarea>): List<Tarea>
+}
+
+class OrdenarPorPrioridad implements EstrategiaOrdenamiento {
+  + ordenar(tareas: List<Tarea>): List<Tarea>
+}
+
+class OrdenarPorFecha implements EstrategiaOrdenamiento {
+  + ordenar(tareas: List<Tarea>): List<Tarea>
+}
+
+class Estadisticas {
+  + calcularProgreso(tareas: List<Tarea>): number
+  + calcularTareasCompletadas(tareas: List<Tarea>): number
+  + calcularTiempoDedicado(tareas: List<Tarea>): number
+}
+
+interface IPersistencia {
+  + guardar(tareas: List<Tarea>): void
+  + cargar(): List<Tarea>
+}
+
+class PersistenciaJSON implements IPersistencia {
+  + guardar(tareas: List<Tarea>): void
+  + cargar(): List<Tarea>
+}
+
+'ENUM
+enum Prioridad {
     ALTA
     MEDIA
     BAJA
-}
+  }
 
-enum TareaCategoria {
-    TRABAJO
-    PERSONAL
-    RECADOS
-}
 
-App --> Tarea : "tareas : Array<Tarea>"
-Tarea --> TareaPrioridad
-Tarea --> TareaCategoria
-@enduml
+  ' Relaciones
+  Sistema *-- Tarea
+  Sistema *-- GestorTareas
+  Sistema *-- Visualizador
+  Sistema *-- Estadisticas
+  Sistema o-- IPersistencia
+
+  Tarea *-- Etiqueta
+  Tarea *-- Categoria
+
+  Tarea <.. GestorTareas
+
+  Visualizador <-- EstrategiaBusqueda
+  Visualizador <-- EstrategiaOrdenamiento
+
+  @enduml
