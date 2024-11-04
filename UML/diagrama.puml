@@ -44,6 +44,14 @@ class Visualizador {
   + ordenarTareas(tareas: List<Tarea>, metodoOrdenamiento: EstrategiaOrdenamiento): List<Tarea>
 }
 
+class Categoria{
+
+}
+
+class Etiqueta {
+
+}
+
 
 interface EstrategiaBusqueda {
   + buscar(tareas: List<Tarea>, valorBusqueda: T): List<Tarea>
@@ -98,11 +106,7 @@ enum prioridad{
     OTRO
   }
 
- enum pruebaMerge{
-    ES 
-    UNA  
-    PRUEBA  
-  }
+ 
 
   ' Relaciones
   Sistema *-- Tarea
