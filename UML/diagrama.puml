@@ -98,7 +98,11 @@ enum prioridad{
     OTRO
   }
 
-
+ enum pruebaMerge{
+    ES 
+    UNA  
+    PRUEBA  
+  }
 
   ' Relaciones
   Sistema *-- Tarea
